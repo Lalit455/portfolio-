@@ -406,17 +406,53 @@
   <script src="js/app.js"></script>
    <script src=" https://smtpjs.com/v3/smtp.js"></script>
   <script>
-    function sendEmail(){
-     var params = {
-       name : document.getElementById("name").value,
-       email_id: document.getElementById("email_id").vlalue,
-       subject: document.getElementById("subject").value,
-       message: document.getElementById("message").value
-     }
-      emailjs.send("service_pbccu6s","template_76vefld",params).then(alert("Email sent!!"))
-       
+function sendEmail(event) {
+    event.preventDefault();  // Prevent the default form submission behavior
 
+    // Collect form data
+    var name = document.getElementById("name").value.trim();
+    var email = document.getElementById("email_id").value.trim();
+    var subject = document.getElementById("subject").value.trim();
+    var message = document.getElementById("message").value.trim();
+
+    // Validate form fields
+    if (!name || !email || !subject || !message) {
+        alert("All fields are required. Please fill in all fields.");
+        return;
     }
+
+    // Validate email field
+    if (!validateEmail(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    // Parameters object
+    var params = {
+        name: name,
+        email_id: email,
+        subject: subject,
+        message: message
+    };
+
+    // Send email using EmailJS
+    emailjs.send("service_pbccu6s", "template_76vefld", params)
+        .then(function(response) {
+            alert("Email sent successfully!");
+            console.log('SUCCESS!', response.status, response.text);
+        }, function(error) {
+            alert("Failed to send email. Please try again later.");
+            console.log('FAILED...', error);
+        });
+}
+
+// Email validation function
+function validateEmail(email) {
+    var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+
   </script>
 </body>
 </html>
